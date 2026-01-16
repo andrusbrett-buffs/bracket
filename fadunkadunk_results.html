@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FADUNKADUNK 2026 - Prediction Market Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --honolulu-blue: #0076B6;
+            --honolulu-light: #0092E0;
+            --silver: #B0B7BC;
+            --silver-dark: #6B7780;
+            --white: #FFFFFF;
+            --black: #000000;
+            --black-mid: #1a1a1a;
+            --black-light: #2d2d2d;
+            --green: #22c55e;
+            --green-dark: #16a34a;
+            --gold: #fbbf24;
+            --red: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Barlow Condensed', sans-serif;
+            background: var(--black);
+            min-height: 100vh;
+        }
+
+        .container {
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(0, 118, 182, 0.15) 0%, transparent 50%),
+                repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255, 255, 255, 0.02) 40px, rgba(255, 255, 255, 0.02) 41px),
+                repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255, 255, 255, 0.02) 40px, rgba(255, 255, 255, 0.02) 41px),
+                var(--black);
+            min-height: 100vh;
+            padding: 25px 30px 40px;
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--honolulu-blue), var(--gold), var(--honolulu-blue));
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .league-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.2rem;
+            color: var(--honolulu-blue);
+            letter-spacing: 0.15em;
+            text-shadow: 3px 3px 0 var(--black-light), 5px 5px 0 rgba(0,0,0,0.5);
+            line-height: 1;
+        }
+
+        .subtitle {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            letter-spacing: 0.4em;
+            margin-top: 6px;
+            text-transform: uppercase;
+        }
+
+        .year-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--gold), #d97706);
+            color: var(--black);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            padding: 6px 25px;
+            margin-top: 12px;
+            clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+            letter-spacing: 0.1em;
+        }
+
+        .connection-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-top: 10px;
+        }
+
+        .connection-status.connected {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--green);
+            border: 1px solid var(--green);
+        }
+
+        .connection-status.disconnected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        .connection-status.connecting {
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .nav-link {
+            color: var(--silver);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 8px 16px;
+            border: 1px solid var(--silver-dark);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--honolulu-blue);
+            border-color: var(--honolulu-blue);
+            color: white;
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .stat-card {
+            background: var(--black-mid);
+            border: 1px solid var(--silver-dark);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .stat-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: var(--honolulu-blue);
+            line-height: 1;
+        }
+
+        .stat-card .label {
+            color: var(--silver);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            color: var(--honolulu-blue);
+            text-align: center;
+            margin: 40px 0 20px;
+            letter-spacing: 0.1em;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--silver-dark);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        /* Champion Predictions */
+        .champion-predictions {
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+
+        .prediction-bar {
+            background: var(--black-mid);
+            border: 1px solid var(--silver-dark);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .prediction-bar:hover {
+            border-color: var(--honolulu-blue);
+            transform: translateX(5px);
+        }
+
+        .prediction-rank {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            min-width: 40px;
+        }
+
+        .prediction-rank.gold { color: var(--gold); }
+        .prediction-rank.silver { color: var(--silver); }
+        .prediction-rank.bronze { color: #cd7f32; }
+
+        .prediction-info {
+            flex: 1;
+        }
+
+        .prediction-name {
+            font-size: 1.1rem;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .prediction-region {
+            font-size: 0.8rem;
+            color: var(--silver-dark);
+        }
+
+        .prediction-bar-container {
+            flex: 2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .prediction-bar-fill {
+            flex: 1;
+            height: 24px;
+            background: var(--black-light);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .prediction-bar-inner {
+            height: 100%;
+            background: linear-gradient(90deg, var(--honolulu-blue), var(--honolulu-light));
+            border-radius: 12px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+        }
+
+        .prediction-pct {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            color: var(--white);
+            min-width: 50px;
+            text-align: right;
+        }
+
+        .prediction-votes {
+            font-size: 0.8rem;
+            color: var(--silver-dark);
+            min-width: 60px;
+            text-align: right;
+        }
+
+        /* Matchup Results */
+        .matchups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .matchup-card {
+            background: var(--black-mid);
+            border: 1px solid var(--silver-dark);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .matchup-header {
+            background: linear-gradient(135deg, var(--black-light), var(--black-mid));
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--silver-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .matchup-title {
+            font-family: 'Bebas Neue', sans-serif;
+            color: var(--honolulu-blue);
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+        }
+
+        .matchup-round {
+            font-size: 0.75rem;
+            color: var(--silver-dark);
+            background: var(--black);
+            padding: 3px 8px;
+            border-radius: 10px;
+        }
+
+        .matchup-teams {
+            padding: 15px;
+        }
+
+        .matchup-team {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            background: var(--black-light);
+        }
+
+        .matchup-team:last-child {
+            margin-bottom: 0;
+        }
+
+        .matchup-team.leader {
+            background: rgba(0, 118, 182, 0.2);
+            border: 1px solid var(--honolulu-blue);
+        }
+
+        .matchup-team.leader .team-pct {
+            color: var(--honolulu-light);
+        }
+
+        .team-info {
+            flex: 1;
+        }
+
+        .team-name {
+            color: var(--white);
+            font-size: 0.95rem;
+        }
+
+        .team-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--black);
+            border-radius: 4px;
+            margin: 0 15px;
+            overflow: hidden;
+        }
+
+        .team-bar-fill {
+            height: 100%;
+            background: var(--honolulu-blue);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .team-pct {
+            font-family: 'Oswald', sans-serif;
+            color: var(--silver);
+            min-width: 45px;
+            text-align: right;
+        }
+
+        /* Voter List */
+        .voter-list {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--black-mid);
+            border: 1px solid var(--silver-dark);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .voter-list-header {
+            background: var(--black-light);
+            padding: 15px 20px;
+            display: grid;
+            grid-template-columns: 1fr 150px 100px;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: var(--silver-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .voter-row {
+            padding: 12px 20px;
+            display: grid;
+            grid-template-columns: 1fr 150px 100px;
+            gap: 10px;
+            border-bottom: 1px solid var(--black-light);
+            transition: background 0.2s ease;
+        }
+
+        .voter-row:hover {
+            background: var(--black-light);
+        }
+
+        .voter-row:last-child {
+            border-bottom: none;
+        }
+
+        .voter-name {
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .voter-champion {
+            color: var(--honolulu-light);
+            font-size: 0.9rem;
+        }
+
+        .voter-date {
+            color: var(--silver-dark);
+            font-size: 0.85rem;
+            text-align: right;
+        }
+
+        .no-votes {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--silver-dark);
+        }
+
+        .no-votes .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .no-votes h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: var(--silver);
+            margin-bottom: 10px;
+        }
+
+        .no-votes a {
+            color: var(--honolulu-blue);
+            text-decoration: none;
+        }
+
+        .no-votes a:hover {
+            text-decoration: underline;
+        }
+
+        .admin-section {
+            max-width: 600px;
+            margin: 40px auto 0;
+            text-align: center;
+        }
+
+        .admin-btn {
+            padding: 10px 20px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.9rem;
+            background: var(--black-mid);
+            border: 1px solid var(--red);
+            color: var(--red);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .admin-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--silver-dark);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+        }
+
+        .refresh-note {
+            text-align: center;
+            color: var(--silver-dark);
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        .last-updated {
+            font-style: italic;
+        }
+
+        .live-badge {
+            display: inline-block;
+            background: var(--green);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .loading-overlay.hidden {
+            display: none;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            color: var(--white);
+        }
+
+        .loading-spinner .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--black-light);
+            border-top-color: var(--honolulu-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading results...</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1 class="league-name">FADUNKADUNK</h1>
+            <p class="subtitle">Prediction Market</p>
+            <div class="year-badge">📊 LIVE RESULTS</div>
+            <div class="connection-status connecting" id="connectionStatus">⏳ Connecting...</div>
+            <nav class="nav-links">
+                <a href="fadunkadunk_voting.html" class="nav-link">Vote</a>
+                <a href="fadunkadunk_results.html" class="nav-link active">Results</a>
+                <a href="fadunkadunk_interactive.html" class="nav-link">Browse Destinations</a>
+            </nav>
+        </header>
+
+        <div id="content">
+            <!-- Content generated by JS -->
+        </div>
+
+        <div class="admin-section">
+            <button class="admin-btn" onclick="clearAllVotes()">🗑️ Clear All Votes (Admin)</button>
+        </div>
+
+        <footer class="footer">
+            FADUNKADUNK FANTASY FOOTBALL • 2026 DESTINATION DRAFT
+        </footer>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <script>
+        // ============================================
+        // FIREBASE CONFIGURATION
+        // Replace these values with your Firebase project config
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        // ============================================
+
+        // Initialize Firebase
+        let db = null;
+        let firebaseEnabled = false;
+
+        try {
+            if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+                firebaseEnabled = true;
+            }
+        } catch (e) {
+            console.log("Firebase not configured, using localStorage fallback");
+        }
+
+        const destinations = {
+            aspen: { name: "Aspen", region: "Colorado" },
+            traverse: { name: "Traverse City", region: "Michigan" },
+            houston: { name: "Houston", region: "Texas" },
+            tahoe: { name: "Lake Tahoe", region: "California" },
+            chattanooga: { name: "Chattanooga", region: "Tennessee" },
+            richmond: { name: "Richmond", region: "Virginia" },
+            columbus: { name: "Columbus", region: "Ohio" },
+            omaha: { name: "Omaha", region: "Nebraska" },
+            bozeman: { name: "Bozeman", region: "Montana" },
+            santafe: { name: "Santa Fe", region: "New Mexico" },
+            greenville: { name: "Greenville", region: "South Carolina" },
+            la: { name: "Los Angeles", region: "California" },
+            birmingham: { name: "Birmingham", region: "Alabama" },
+            mexicocity: { name: "Mexico City", region: "Mexico" },
+            durham: { name: "Durham", region: "North Carolina" },
+            madison: { name: "Madison", region: "Wisconsin" },
+            boise: { name: "Boise", region: "Idaho" },
+            vegas: { name: "Las Vegas", region: "Nevada" },
+            cabo: { name: "Cabo San Lucas", region: "Mexico" },
+            coeurdalene: { name: "Coeur d'Alene", region: "Idaho" },
+            nyc: { name: "New York City", region: "New York" },
+            tulsa: { name: "Tulsa", region: "Oklahoma" },
+            puertovallarta: { name: "Puerto Vallarta", region: "Mexico" },
+            saugatuck: { name: "Saugatuck", region: "Michigan" }
+        };
+
+        const matchupInfo = {
+            r1m1: { name: "Matchup 1", round: "Round 1", teams: ['aspen', 'traverse'] },
+            r1m2: { name: "Matchup 2", round: "Round 1", teams: ['houston', 'tahoe'] },
+            r1m3: { name: "Matchup 3", round: "Round 1", teams: ['chattanooga', 'richmond'] },
+            r1m4: { name: "Matchup 4", round: "Round 1", teams: ['columbus', 'omaha'] },
+            r1m5: { name: "Matchup 5", round: "Round 1", teams: ['bozeman', 'santafe'] },
+            r1m6: { name: "Matchup 6", round: "Round 1", teams: ['greenville', 'la'] },
+            r1m7: { name: "Matchup 7", round: "Round 1", teams: ['birmingham', 'mexicocity'] },
+            r1m8: { name: "Matchup 8", round: "Round 1", teams: ['durham', 'madison'] }
+        };
+
+        function updateConnectionStatus(status) {
+            const el = document.getElementById('connectionStatus');
+            el.className = 'connection-status ' + status;
+            if (status === 'connected') {
+                el.innerHTML = '🟢 Live Updates';
+            } else if (status === 'disconnected') {
+                el.innerHTML = '🔴 Offline (Local Mode)';
+            } else {
+                el.innerHTML = '⏳ Connecting...';
+            }
+        }
+
+        async function getVotes() {
+            if (firebaseEnabled && db) {
+                try {
+                    const snapshot = await db.ref('votes').once('value');
+                    const data = snapshot.val();
+                    if (!data) return [];
+                    return Object.values(data);
+                } catch (e) {
+                    console.error('Error fetching from Firebase:', e);
+                    return JSON.parse(localStorage.getItem('fadunkadunk_votes') || '[]');
+                }
+            }
+            return JSON.parse(localStorage.getItem('fadunkadunk_votes') || '[]');
+        }
+
+        function getDestinationName(key) {
+            return destinations[key]?.name || key;
+        }
+
+        function getDestinationRegion(key) {
+            return destinations[key]?.region || '';
+        }
+
+        async function renderResults() {
+            const votes = await getVotes();
+            const content = document.getElementById('content');
+
+            if (votes.length === 0) {
+                content.innerHTML = `
+                    <div class="no-votes">
+                        <div class="icon">🗳️</div>
+                        <h3>No Votes Yet!</h3>
+                        <p>Be the first to submit your predictions.</p>
+                        <p><a href="fadunkadunk_voting.html">Cast your vote →</a></p>
+                    </div>
+                `;
+                document.getElementById('loadingOverlay').classList.add('hidden');
+                return;
+            }
+
+            // Calculate champion predictions
+            const championCounts = {};
+            votes.forEach(vote => {
+                const champ = vote.champion;
+                championCounts[champ] = (championCounts[champ] || 0) + 1;
+            });
+
+            const sortedChampions = Object.entries(championCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+
+            const maxChampVotes = sortedChampions[0]?.[1] || 1;
+
+            // Calculate matchup predictions
+            const matchupStats = {};
+            const round1Matchups = ['r1m1', 'r1m2', 'r1m3', 'r1m4', 'r1m5', 'r1m6', 'r1m7', 'r1m8'];
+
+            round1Matchups.forEach(matchupId => {
+                const info = matchupInfo[matchupId];
+                const counts = {};
+                info.teams.forEach(team => counts[team] = 0);
+
+                votes.forEach(vote => {
+                    const pick = vote.picks[matchupId];
+                    if (pick && counts.hasOwnProperty(pick)) {
+                        counts[pick]++;
+                    }
+                });
+
+                matchupStats[matchupId] = {
+                    ...info,
+                    counts,
+                    total: votes.length
+                };
+            });
+
+            const liveIndicator = firebaseEnabled ? '<span class="live-badge">LIVE</span>' : '';
+
+            content.innerHTML = `
+                <div class="stats-overview">
+                    <div class="stat-card">
+                        <div class="icon">🗳️</div>
+                        <div class="value">${votes.length}</div>
+                        <div class="label">Total Votes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">🏆</div>
+                        <div class="value">${Object.keys(championCounts).length}</div>
+                        <div class="label">Unique Champions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">📈</div>
+                        <div class="value">${sortedChampions[0] ? Math.round((sortedChampions[0][1] / votes.length) * 100) : 0}%</div>
+                        <div class="label">Top Pick Odds</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">🎯</div>
+                        <div class="value">${sortedChampions[0] ? getDestinationName(sortedChampions[0][0]).split(' ')[0] : '—'}</div>
+                        <div class="label">Favorite</div>
+                    </div>
+                </div>
+
+                <h2 class="section-title">🏆 Champion Predictions ${liveIndicator}</h2>
+                <p class="section-subtitle">Who does the crowd think will win it all?</p>
+
+                <div class="champion-predictions">
+                    ${sortedChampions.map(([key, count], i) => {
+                        const pct = Math.round((count / votes.length) * 100);
+                        const barWidth = Math.round((count / maxChampVotes) * 100);
+                        const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+                        return `
+                            <div class="prediction-bar">
+                                <div class="prediction-rank ${rankClass}">#${i + 1}</div>
+                                <div class="prediction-info">
+                                    <div class="prediction-name">${getDestinationName(key)}</div>
+                                    <div class="prediction-region">${getDestinationRegion(key)}</div>
+                                </div>
+                                <div class="prediction-bar-container">
+                                    <div class="prediction-bar-fill">
+                                        <div class="prediction-bar-inner" style="width: ${barWidth}%"></div>
+                                    </div>
+                                    <div class="prediction-pct">${pct}%</div>
+                                    <div class="prediction-votes">${count} vote${count !== 1 ? 's' : ''}</div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                <h2 class="section-title">📊 Round 1 Matchup Predictions</h2>
+                <p class="section-subtitle">See how the crowd is picking each opening matchup</p>
+
+                <div class="matchups-grid">
+                    ${round1Matchups.map(matchupId => {
+                        const stats = matchupStats[matchupId];
+                        const teams = Object.entries(stats.counts).sort((a, b) => b[1] - a[1]);
+                        const total = stats.total;
+
+                        return `
+                            <div class="matchup-card">
+                                <div class="matchup-header">
+                                    <span class="matchup-title">${stats.name}</span>
+                                    <span class="matchup-round">${stats.round}</span>
+                                </div>
+                                <div class="matchup-teams">
+                                    ${teams.map(([team, count], i) => {
+                                        const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+                                        const isLeader = i === 0 && count > 0;
+                                        return `
+                                            <div class="matchup-team ${isLeader ? 'leader' : ''}">
+                                                <div class="team-info">
+                                                    <div class="team-name">${getDestinationName(team)}</div>
+                                                </div>
+                                                <div class="team-bar">
+                                                    <div class="team-bar-fill" style="width: ${pct}%"></div>
+                                                </div>
+                                                <div class="team-pct">${pct}%</div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                <h2 class="section-title">👥 All Voters</h2>
+                <p class="section-subtitle">See who's made their predictions</p>
+
+                <div class="voter-list">
+                    <div class="voter-list-header">
+                        <span>Voter</span>
+                        <span>Champion Pick</span>
+                        <span>Submitted</span>
+                    </div>
+                    ${votes.slice().reverse().map(vote => {
+                        const date = new Date(vote.timestamp);
+                        const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                        return `
+                            <div class="voter-row">
+                                <span class="voter-name">${vote.name}</span>
+                                <span class="voter-champion">${getDestinationName(vote.champion)}</span>
+                                <span class="voter-date">${dateStr}</span>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                <p class="refresh-note">
+                    <span class="last-updated">Last updated: ${new Date().toLocaleTimeString()}</span>
+                    ${firebaseEnabled ? '<br>Results update automatically in real-time!' : '<br>Refresh the page to see the latest votes'}
+                </p>
+            `;
+
+            document.getElementById('loadingOverlay').classList.add('hidden');
+        }
+
+        async function clearAllVotes() {
+            if (confirm('Are you sure you want to clear ALL votes? This cannot be undone!')) {
+                if (firebaseEnabled && db) {
+                    try {
+                        await db.ref('votes').remove();
+                    } catch (e) {
+                        console.error('Error clearing Firebase votes:', e);
+                    }
+                }
+                localStorage.removeItem('fadunkadunk_votes');
+                renderResults();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (firebaseEnabled && db) {
+                try {
+                    // Test connection
+                    await db.ref('.info/connected').once('value');
+                    updateConnectionStatus('connected');
+
+                    // Set up real-time listener
+                    db.ref('votes').on('value', () => {
+                        renderResults();
+                    });
+                } catch (e) {
+                    updateConnectionStatus('disconnected');
+                    renderResults();
+                }
+            } else {
+                updateConnectionStatus('disconnected');
+                renderResults();
+            }
+        });
+    </script>
+</body>
+</html>

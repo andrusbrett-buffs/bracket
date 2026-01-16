@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FADUNKADUNK 2026 - Cast Your Vote</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --honolulu-blue: #0076B6;
+            --honolulu-light: #0092E0;
+            --silver: #B0B7BC;
+            --silver-dark: #6B7780;
+            --white: #FFFFFF;
+            --black: #000000;
+            --black-mid: #1a1a1a;
+            --black-light: #2d2d2d;
+            --green: #22c55e;
+            --green-dark: #16a34a;
+            --gold: #fbbf24;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Barlow Condensed', sans-serif;
+            background: var(--black);
+            min-height: 100vh;
+            overflow-x: auto;
+        }
+
+        .container {
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(0, 118, 182, 0.15) 0%, transparent 50%),
+                repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255, 255, 255, 0.02) 40px, rgba(255, 255, 255, 0.02) 41px),
+                repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255, 255, 255, 0.02) 40px, rgba(255, 255, 255, 0.02) 41px),
+                var(--black);
+            min-height: 100vh;
+            padding: 25px 30px 40px;
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--honolulu-blue), var(--silver), var(--honolulu-blue));
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .league-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.2rem;
+            color: var(--honolulu-blue);
+            letter-spacing: 0.15em;
+            text-shadow: 3px 3px 0 var(--black-light), 5px 5px 0 rgba(0,0,0,0.5);
+            line-height: 1;
+        }
+
+        .subtitle {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.1rem;
+            color: var(--silver);
+            letter-spacing: 0.4em;
+            margin-top: 6px;
+            text-transform: uppercase;
+        }
+
+        .year-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--honolulu-blue), #005a8c);
+            color: white;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            padding: 6px 25px;
+            margin-top: 12px;
+            clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+            letter-spacing: 0.1em;
+        }
+
+        .connection-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-top: 10px;
+        }
+
+        .connection-status.connected {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--green);
+            border: 1px solid var(--green);
+        }
+
+        .connection-status.disconnected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        .connection-status.connecting {
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .nav-link {
+            color: var(--silver);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 8px 16px;
+            border: 1px solid var(--silver-dark);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--honolulu-blue);
+            border-color: var(--honolulu-blue);
+            color: white;
+        }
+
+        .instructions {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            padding: 20px;
+            background: rgba(0, 118, 182, 0.1);
+            border: 1px solid rgba(0, 118, 182, 0.3);
+            border-radius: 8px;
+        }
+
+        .instructions h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            color: var(--honolulu-blue);
+            font-size: 1.4rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .instructions p {
+            color: var(--silver);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .progress-bar {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            background: var(--black-mid);
+            border-radius: 10px;
+            padding: 3px;
+        }
+
+        .progress-fill {
+            height: 20px;
+            background: linear-gradient(90deg, var(--honolulu-blue), var(--green));
+            border-radius: 8px;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .rounds-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .round {
+            background: var(--black-mid);
+            border: 1px solid var(--silver-dark);
+            border-radius: 8px;
+            padding: 20px;
+            min-width: 300px;
+        }
+
+        .round-header {
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--silver-dark);
+            margin-bottom: 15px;
+        }
+
+        .round-header h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            color: var(--honolulu-blue);
+            letter-spacing: 0.15em;
+        }
+
+        .round-header .date {
+            color: var(--silver);
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+
+        .matchup {
+            background: var(--black-light);
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .matchup:last-child {
+            margin-bottom: 0;
+        }
+
+        .matchup-label {
+            font-size: 0.7rem;
+            color: var(--silver-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .matchup-options {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .team-option {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            background: var(--black-mid);
+            border: 2px solid var(--silver-dark);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .team-option:hover {
+            border-color: var(--honolulu-blue);
+            background: rgba(0, 118, 182, 0.1);
+        }
+
+        .team-option.selected {
+            border-color: var(--green);
+            background: rgba(34, 197, 94, 0.15);
+        }
+
+        .team-option.selected .team-radio {
+            background: var(--green);
+            border-color: var(--green);
+        }
+
+        .team-option.selected .team-radio::after {
+            content: '✓';
+            color: white;
+            font-size: 0.7rem;
+        }
+
+        .team-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--silver-dark);
+            border-radius: 50%;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .team-name {
+            color: var(--white);
+            font-size: 0.9rem;
+            flex: 1;
+        }
+
+        .team-option.bye .team-name::after {
+            content: ' ★';
+            color: var(--honolulu-blue);
+            font-size: 0.7rem;
+        }
+
+        .submit-section {
+            max-width: 500px;
+            margin: 40px auto 0;
+            text-align: center;
+        }
+
+        .voter-input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1rem;
+            font-family: 'Barlow Condensed', sans-serif;
+            background: var(--black-mid);
+            border: 2px solid var(--silver-dark);
+            border-radius: 8px;
+            color: white;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .voter-input:focus {
+            outline: none;
+            border-color: var(--honolulu-blue);
+        }
+
+        .voter-input::placeholder {
+            color: var(--silver-dark);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px 40px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 0.15em;
+            background: linear-gradient(135deg, var(--green), var(--green-dark));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: var(--silver-dark);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .submit-status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .submit-status.success {
+            display: block;
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid var(--green);
+            color: var(--green);
+        }
+
+        .submit-status.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--silver-dark);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* Modal for destination info */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border: 2px solid var(--honolulu-blue);
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 118, 182, 0.3);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--honolulu-blue), #005a8c);
+            padding: 20px 25px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: white;
+            letter-spacing: 0.1em;
+        }
+
+        .modal-subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        .modal-content {
+            padding: 25px;
+        }
+
+        .info-section {
+            margin-bottom: 20px;
+        }
+
+        .info-section h3 {
+            font-family: 'Oswald', sans-serif;
+            color: var(--honolulu-blue);
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-section h3::before {
+            content: '';
+            width: 4px;
+            height: 16px;
+            background: var(--honolulu-blue);
+            border-radius: 2px;
+        }
+
+        .info-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .info-list li {
+            background: rgba(0, 118, 182, 0.15);
+            border: 1px solid rgba(0, 118, 182, 0.3);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--silver);
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: rgba(0,0,0,0.3);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-icon { font-size: 1.5rem; margin-bottom: 4px; }
+        .stat-label { color: var(--silver-dark); font-size: 0.7rem; text-transform: uppercase; }
+        .stat-value { color: var(--honolulu-light); font-family: 'Oswald', sans-serif; font-size: 0.9rem; margin-top: 2px; }
+
+        .info-btn {
+            background: none;
+            border: none;
+            color: var(--honolulu-light);
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            margin-left: 5px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .info-btn:hover {
+            opacity: 1;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .loading-overlay.hidden {
+            display: none;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            color: var(--white);
+        }
+
+        .loading-spinner .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--black-light);
+            border-top-color: var(--honolulu-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Connecting to database...</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1 class="league-name">FADUNKADUNK</h1>
+            <p class="subtitle">2026 Destination Draft</p>
+            <div class="year-badge">CAST YOUR VOTE</div>
+            <div class="connection-status connecting" id="connectionStatus">⏳ Connecting...</div>
+            <nav class="nav-links">
+                <a href="fadunkadunk_voting.html" class="nav-link active">Vote</a>
+                <a href="fadunkadunk_results.html" class="nav-link">Results</a>
+                <a href="fadunkadunk_interactive.html" class="nav-link">Browse Destinations</a>
+            </nav>
+        </header>
+
+        <div class="instructions">
+            <h2>📍 Pick Your Winners!</h2>
+            <p>Click on the destination you think should win each matchup. You can click the ℹ️ button to learn more about each location. Once you've made all your picks, enter your name and submit!</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%">0 / 24 picks</div>
+        </div>
+
+        <div class="rounds-container" id="roundsContainer">
+            <!-- Rounds will be generated by JS -->
+        </div>
+
+        <div class="submit-section">
+            <input type="text" class="voter-input" id="voterName" placeholder="Enter your name to submit...">
+            <button class="submit-btn" id="submitBtn" disabled>SUBMIT YOUR PICKS</button>
+            <div class="submit-status" id="submitStatus"></div>
+        </div>
+
+        <footer class="footer">
+            FADUNKADUNK FANTASY FOOTBALL • 2026 DESTINATION DRAFT
+        </footer>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeModal()">×</button>
+                <h2 class="modal-title" id="modal-title">Location Name</h2>
+                <p class="modal-subtitle" id="modal-subtitle">State/Country</p>
+            </div>
+            <div class="modal-content" id="modal-content"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <script>
+        // ============================================
+        // FIREBASE CONFIGURATION
+        // Replace these values with your Firebase project config
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        // ============================================
+
+        // Initialize Firebase
+        let db = null;
+        let firebaseEnabled = false;
+
+        try {
+            if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+                firebaseEnabled = true;
+            }
+        } catch (e) {
+            console.log("Firebase not configured, using localStorage fallback");
+        }
+
+        // Matchup data
+        const matchups = {
+            round1: [
+                { id: 'r1m1', teams: ['aspen', 'traverse'], labels: ['Aspen, CO', 'Traverse City, MI'] },
+                { id: 'r1m2', teams: ['houston', 'tahoe'], labels: ['Houston, TX', 'Lake Tahoe, CA'] },
+                { id: 'r1m3', teams: ['chattanooga', 'richmond'], labels: ['Chattanooga, TN', 'Richmond, VA'] },
+                { id: 'r1m4', teams: ['columbus', 'omaha'], labels: ['Columbus, OH', 'Omaha, NE'] },
+                { id: 'r1m5', teams: ['bozeman', 'santafe'], labels: ['Bozeman, MT', 'Santa Fe, NM'] },
+                { id: 'r1m6', teams: ['greenville', 'la'], labels: ['Greenville, SC', 'Los Angeles, CA'] },
+                { id: 'r1m7', teams: ['birmingham', 'mexicocity'], labels: ['Birmingham, AL', 'Mexico City, MX'] },
+                { id: 'r1m8', teams: ['durham', 'madison'], labels: ['Durham, NC', 'Madison, WI'] }
+            ],
+            round2: [
+                { id: 'r2m1', teams: ['boise', 'r1m1_winner'], labels: ['Boise, ID', 'Round 1 Winner'], bye: 0 },
+                { id: 'r2m2', teams: ['vegas', 'r1m2_winner'], labels: ['Las Vegas, NV', 'Round 1 Winner'], bye: 0 },
+                { id: 'r2m3', teams: ['cabo', 'r1m3_winner'], labels: ['Cabo, MX', 'Round 1 Winner'], bye: 0 },
+                { id: 'r2m4', teams: ['coeurdalene', 'r1m4_winner'], labels: ['Coeur d\'Alene, ID', 'Round 1 Winner'], bye: 0 },
+                { id: 'r2m5', teams: ['nyc', 'r1m5_winner'], labels: ['NYC, NY', 'Round 1 Winner'], bye: 0 },
+                { id: 'r2m6', teams: ['tulsa', 'r1m6_winner'], labels: ['Tulsa, OK', 'Round 1 Winner'], bye: 0 },
+                { id: 'r2m7', teams: ['puertovallarta', 'r1m7_winner'], labels: ['Puerto Vallarta, MX', 'Round 1 Winner'], bye: 0 },
+                { id: 'r2m8', teams: ['saugatuck', 'r1m8_winner'], labels: ['Saugatuck, MI', 'Round 1 Winner'], bye: 0 }
+            ],
+            quarters: [
+                { id: 'qm1', teams: ['r2m1_winner', 'r2m2_winner'], labels: ['R2-1 Winner', 'R2-2 Winner'] },
+                { id: 'qm2', teams: ['r2m3_winner', 'r2m4_winner'], labels: ['R2-3 Winner', 'R2-4 Winner'] },
+                { id: 'qm3', teams: ['r2m5_winner', 'r2m6_winner'], labels: ['R2-5 Winner', 'R2-6 Winner'] },
+                { id: 'qm4', teams: ['r2m7_winner', 'r2m8_winner'], labels: ['R2-7 Winner', 'R2-8 Winner'] }
+            ],
+            semis: [
+                { id: 'sm1', teams: ['qm1_winner', 'qm2_winner'], labels: ['Q1 Winner', 'Q2 Winner'] },
+                { id: 'sm2', teams: ['qm3_winner', 'qm4_winner'], labels: ['Q3 Winner', 'Q4 Winner'] }
+            ],
+            finals: [
+                { id: 'fm1', teams: ['sm1_winner', 'sm2_winner'], labels: ['Semi 1 Winner', 'Semi 2 Winner'] }
+            ]
+        };
+
+        // Destination data
+        const destinations = {
+            aspen: { name: "Aspen", region: "Colorado, USA", vibe: "Luxury Mountain Town", bestFor: "Winter Sports & Fine Dining", attractions: ["Aspen Mountain Skiing", "Maroon Bells", "Independence Pass", "Aspen Art Museum", "Rio Grande Trail"], restaurants: ["Matsuhisa", "Element 47", "The Wild Fig", "Ajax Tavern", "Meatball Shack"], nightlife: ["Belly Up Aspen", "Escobar", "The Living Room", "Silver City Saloon"], sports: ["Ajax Mountain", "Buttermilk Ski Area", "Aspen Ice Garden", "Rio Grande Park"] },
+            traverse: { name: "Traverse City", region: "Michigan, USA", vibe: "Wine Country Beach Town", bestFor: "Wineries & Lake Life", attractions: ["Sleeping Bear Dunes", "Old Mission Peninsula", "Downtown TC", "Clinch Park Beach", "Leelanau Peninsula"], restaurants: ["The Cooks' House", "Trattoria Stella", "Red Ginger", "Amical", "The Franklin"], nightlife: ["Low Bar", "Workshop Brewing", "The Little Fleet", "Mackinaw Brewing"], sports: ["TART Trails", "Hickory Hills", "Grand Traverse Bay", "Crystal Mountain"] },
+            houston: { name: "Houston", region: "Texas, USA", vibe: "Diverse Mega-City", bestFor: "Food Scene & Space Center", attractions: ["Space Center Houston", "Museum District", "Buffalo Bayou Park", "Galleria", "San Jacinto Monument"], restaurants: ["Underbelly Hospitality", "Pappas Bros Steakhouse", "Uchi", "The Breakfast Klub", "Killen's BBQ"], nightlife: ["White Oak Music Hall", "Barbarella", "Present Company", "The Rustic"], sports: ["NRG Stadium (Texans)", "Minute Maid Park (Astros)", "Toyota Center (Rockets)", "Shell Energy Stadium"] },
+            tahoe: { name: "Lake Tahoe", region: "California/Nevada, USA", vibe: "Alpine Paradise", bestFor: "Skiing & Lake Activities", attractions: ["Emerald Bay", "Heavenly Gondola", "Sand Harbor", "Vikingsholm Castle", "Donner Pass"], restaurants: ["Evan's American Gourmet Cafe", "Sunnyside Restaurant", "The Lone Eagle Grille", "Artemis Lakefront Cafe"], nightlife: ["Stateline Casinos", "The Loft", "Crystal Bay Club", "Moe's BBQ"], sports: ["Palisades Tahoe", "Heavenly Mountain", "Northstar California", "Edgewood Golf Course"] },
+            chattanooga: { name: "Chattanooga", region: "Tennessee, USA", vibe: "Outdoor Adventure Hub", bestFor: "Rock Climbing & River Sports", attractions: ["Lookout Mountain", "Tennessee Aquarium", "Ruby Falls", "Walnut Street Bridge", "Rock City"], restaurants: ["St. John's Meeting Place", "Public House", "Easy Bistro", "STIR", "Taqueria Jalisco"], nightlife: ["The Signal", "Songbirds Guitar Museum", "JJ's Bohemia", "Flying Squirrel"], sports: ["AT&T Field (Lookouts)", "Finley Stadium", "Tennessee River Paddle", "Stringers Ridge"] },
+            richmond: { name: "Richmond", region: "Virginia, USA", vibe: "Historic River City", bestFor: "Craft Beer & History", attractions: ["Belle Isle", "Virginia Museum of Fine Arts", "Hollywood Cemetery", "Carytown", "Canal Walk"], restaurants: ["The Roosevelt", "L'Opossum", "Brenner Pass", "ZZQ", "Mama J's Kitchen"], nightlife: ["The Broadberry", "The Camel", "Garden Grove Brewing", "Hardywood Park"], sports: ["The Diamond (Flying Squirrels)", "City Stadium", "James River Park", "Pocahontas State Park"] },
+            columbus: { name: "Columbus", region: "Ohio, USA", vibe: "College Town Energy", bestFor: "OSU Football & Food Scene", attractions: ["Ohio Stadium", "Short North Arts District", "German Village", "COSI", "Franklin Park Conservatory"], restaurants: ["The Refectory", "Wolf's Ridge Brewing", "Lindey's", "Schmidt's Sausage Haus", "Hot Chicken Takeover"], nightlife: ["Newport Music Hall", "Skully's", "Ace of Cups", "Brothers Drake Meadery"], sports: ["Ohio Stadium (Buckeyes)", "Nationwide Arena (Blue Jackets)", "Huntington Park (Clippers)", "Crew Stadium"] },
+            omaha: { name: "Omaha", region: "Nebraska, USA", vibe: "Underrated Midwest Gem", bestFor: "Steakhouses & Zoo", attractions: ["Henry Doorly Zoo", "Old Market District", "Bob Kerrey Pedestrian Bridge", "Joslyn Art Museum", "Durham Museum"], restaurants: ["Gorat's Steakhouse", "Dante Pizzeria", "Block 16", "V. Mertz", "The Drover"], nightlife: ["Waiting Room Lounge", "The Slowdown", "Benson District Bars", "Krug Park"], sports: ["Charles Schwab Field (CWS)", "CHI Health Center", "Werner Park", "Baxter Arena"] },
+            bozeman: { name: "Bozeman", region: "Montana, USA", vibe: "Mountain Adventure Base", bestFor: "Yellowstone Gateway & Skiing", attractions: ["Yellowstone National Park", "Big Sky Resort", "Museum of the Rockies", "Main Street Downtown", "Hyalite Canyon"], restaurants: ["Blackbird Kitchen", "Plonk Wine", "The Mint Cafe", "Roost Fried Chicken", "Open Range"], nightlife: ["Rocking R Bar", "The Crystal Bar", "MAP Brewing", "Mountains Walking Brewery"], sports: ["Big Sky Resort", "Bridger Bowl", "Bobcat Stadium (MSU)", "Story Mill Park"] },
+            santafe: { name: "Santa Fe", region: "New Mexico, USA", vibe: "Artistic Desert Oasis", bestFor: "Art Galleries & Southwest Culture", attractions: ["Canyon Road", "Georgia O'Keeffe Museum", "Santa Fe Plaza", "Meow Wolf", "Loretto Chapel"], restaurants: ["The Shed", "Geronimo", "Cafe Pasqual's", "Tia Sophia's", "La Choza"], nightlife: ["Secreto Lounge", "Cowgirl BBQ", "El Farol", "Santa Fe Brewing"], sports: ["Santa Fe Ski Basin", "Dale Ball Trails", "Santa Fe Fuego", "Hyde Memorial Park"] },
+            greenville: { name: "Greenville", region: "South Carolina, USA", vibe: "Charming Downtown Revival", bestFor: "Falls Park & Food Scene", attractions: ["Falls Park on the Reedy", "Liberty Bridge", "Downtown Main Street", "Peace Center", "Fluor Field"], restaurants: ["The Lazy Goat", "Soby's", "Jianna", "Nose Dive", "The Anchorage"], nightlife: ["The Radio Room", "Smiley's Acoustic Cafe", "Jack n Diane's", "Ink n Ivy"], sports: ["Fluor Field (Drive)", "Bon Secours Wellness Arena", "Swamp Rabbit Trail", "Paris Mountain"] },
+            la: { name: "Los Angeles", region: "California, USA", vibe: "Entertainment Capital", bestFor: "Beaches & Nightlife", attractions: ["Santa Monica Pier", "Hollywood Walk of Fame", "Getty Center", "Griffith Observatory", "Venice Beach"], restaurants: ["Bestia", "n/naka", "Gjusta", "Providence", "Guerrilla Tacos"], nightlife: ["The Viper Room", "Catch One", "The Dresden", "Good Times at Davey Wayne's"], sports: ["SoFi Stadium (Rams/Chargers)", "Crypto.com Arena (Lakers)", "Dodger Stadium", "Rose Bowl"] },
+            birmingham: { name: "Birmingham", region: "Alabama, USA", vibe: "Southern Renaissance City", bestFor: "BBQ & Civil Rights History", attractions: ["Birmingham Civil Rights Institute", "Vulcan Park", "Regions Field", "Railroad Park", "Barber Motorsports"], restaurants: ["Highlands Bar and Grill", "Saw's BBQ", "Hot and Hot Fish Club", "Bottega", "Automatic Seafood"], nightlife: ["Saturn Birmingham", "The Nick", "Good People Brewing", "Avondale Brewing"], sports: ["Protective Stadium (UAB)", "Regions Field (Barons)", "Barber Motorsports Park", "Oak Mountain"] },
+            mexicocity: { name: "Mexico City", region: "Mexico", vibe: "Historic Mega-Metropolis", bestFor: "Tacos & Museums", attractions: ["Zócalo", "Museo Frida Kahlo", "Chapultepec Castle", "Teotihuacán", "Coyoacán"], restaurants: ["Pujol", "Contramar", "El Huequito", "El Califa de León", "Quintonil"], nightlife: ["Mama Rumba", "Patrick Miller", "Hanky Panky", "La Clandestina"], sports: ["Estadio Azteca", "Foro Sol", "Arena México", "Hipódromo de las Américas"] },
+            durham: { name: "Durham", region: "North Carolina, USA", vibe: "Research Triangle Creative Hub", bestFor: "BBQ & Bull City Culture", attractions: ["Duke University", "American Tobacco Campus", "Durham Bulls Athletic Park", "Sarah P. Duke Gardens", "Brightleaf Square"], restaurants: ["Mateo Bar de Tapas", "The Pit", "M Kokko", "Dame's Chicken & Waffles", "Pizzeria Toro"], nightlife: ["Motorco Music Hall", "The Pinhook", "Fullsteam Brewery", "Arcana"], sports: ["Durham Bulls Athletic Park", "Cameron Indoor (Duke)", "Wallace Wade Stadium", "Eno River Trails"] },
+            madison: { name: "Madison", region: "Wisconsin, USA", vibe: "Progressive College Town", bestFor: "Badgers Football & Lakes", attractions: ["State Street", "Wisconsin State Capitol", "Olbrich Gardens", "Henry Vilas Zoo", "Chazen Museum"], restaurants: ["Heritage Tavern", "Merchant", "Graze", "The Old Fashioned", "Ian's Pizza"], nightlife: ["High Noon Saloon", "The Majestic", "State Street Brats", "Great Dane Pub"], sports: ["Camp Randall Stadium (Badgers)", "Kohl Center", "Breese Stevens Field", "Devil's Lake"] },
+            boise: { name: "Boise", region: "Idaho, USA", vibe: "Hidden Gem Mountain City", bestFor: "Outdoor Access & Blue Turf", attractions: ["Boise River Greenbelt", "Idaho State Capitol", "Basque Block", "Old Idaho Penitentiary", "Table Rock"], restaurants: ["Richard's", "Fork", "Bittercreek Alehouse", "Goldy's Breakfast Bistro", "Chandlers"], nightlife: ["Neurolux", "Pengilly's Saloon", "Reef", "Modern Hotel Bar"], sports: ["Albertsons Stadium (Blue Turf)", "Idaho Central Arena", "Bogus Basin", "Boise River Rafting"] },
+            vegas: { name: "Las Vegas", region: "Nevada, USA", vibe: "Entertainment Epicenter", bestFor: "Nightlife & Sports", attractions: ["The Strip", "Fremont Street", "Red Rock Canyon", "High Roller", "Bellagio Fountains"], restaurants: ["Joel Robuchon", "Momofuku", "Bacchanal Buffet", "é by José Andrés", "Carson Kitchen"], nightlife: ["XS", "Omnia", "Marquee", "Hakkasan", "On The Record"], sports: ["Allegiant Stadium (Raiders)", "T-Mobile Arena (Knights)", "Las Vegas Motor Speedway", "Wynn Golf Club"] },
+            cabo: { name: "Cabo San Lucas", region: "Baja California Sur, Mexico", vibe: "Beach Party Paradise", bestFor: "Beaches & Margaritas", attractions: ["El Arco", "Lover's Beach", "Medano Beach", "San José del Cabo", "Land's End"], restaurants: ["Edith's", "Nick-San", "Flora's Field Kitchen", "The Office on the Beach", "Manta"], nightlife: ["Squid Roe", "Cabo Wabo Cantina", "El Squid Roe", "Mandala", "Pink Kitty"], sports: ["Deep Sea Fishing", "Quivira Golf Club", "Surf Breaks", "Whale Watching Tours"] },
+            coeurdalene: { name: "Coeur d'Alene", region: "Idaho, USA", vibe: "Lake Resort Town", bestFor: "Lake Activities & Golf", attractions: ["Lake Coeur d'Alene", "Floating Green Golf Course", "Tubbs Hill", "Downtown Sherman Ave", "Silver Mountain"], restaurants: ["Beverly's", "Tony's on the Lake", "Syringa Japanese Cafe", "Dockside Restaurant"], nightlife: ["Iron Horse Bar", "Tito Macaroni's", "The Beacon", "Capone's Sports Pub"], sports: ["The Coeur d'Alene Golf Course", "Schweitzer Mountain", "Lake Paddleboarding", "Hiawatha Trail"] },
+            nyc: { name: "New York City", region: "New York, USA", vibe: "The City That Never Sleeps", bestFor: "Everything, Really", attractions: ["Central Park", "Times Square", "Statue of Liberty", "Brooklyn Bridge", "High Line"], restaurants: ["Eleven Madison Park", "Le Bernardin", "Katz's Deli", "Di Fara Pizza", "Peter Luger"], nightlife: ["Brooklyn Mirage", "Le Bain", "Death & Co", "House of Yes", "Comedy Cellar"], sports: ["Madison Square Garden", "Yankee Stadium", "MetLife Stadium", "Citi Field", "Barclays Center"] },
+            tulsa: { name: "Tulsa", region: "Oklahoma, USA", vibe: "Art Deco Renaissance", bestFor: "Route 66 & Gathering Place", attractions: ["Gathering Place", "Philbrook Museum", "Blue Whale of Catoosa", "BOK Center", "Cherry Street"], restaurants: ["Burn Co BBQ", "Juniper", "Bodean Seafood", "The Tavern", "Kilkenny's Irish Pub"], nightlife: ["Cain's Ballroom", "The Vanguard", "Arnie's Bar", "Soundpony Lounge"], sports: ["ONEOK Field (Drillers)", "BOK Center", "Gathering Place Sports Courts", "Mohawk Park Golf"] },
+            puertovallarta: { name: "Puerto Vallarta", region: "Jalisco, Mexico", vibe: "Romantic Beach Town", bestFor: "Sunsets & Malecón", attractions: ["Malecón Boardwalk", "Los Muertos Beach", "Zona Romántica", "El Centro", "Marietas Islands"], restaurants: ["Café des Artistes", "La Palapa", "Tintoque", "Mariscos 8 Tostadas", "Barcelona Tapas"], nightlife: ["La Vaquita", "Zoo Bar", "Roxy Rock House", "Mandala", "La Santa"], sports: ["Surfing at Sayulita", "Deep Sea Fishing", "Vista Vallarta Golf", "Sierra Madre Hiking"] },
+            saugatuck: { name: "Saugatuck", region: "Michigan, USA", vibe: "Artsy Beach Village", bestFor: "Galleries & Dunes", attractions: ["Oval Beach", "Saugatuck Dunes State Park", "Downtown Galleries", "Chain Ferry", "Mount Baldhead"], restaurants: ["Everyday People Cafe", "Bowdie's Chophouse", "Phil's Bar & Grille", "Marro's Italian"], nightlife: ["The Butler", "Saugatuck Brewing Company", "Wally's Bar", "The Dunes Resort"], sports: ["Oval Beach Swimming", "Kal-Haven Trail", "Kayaking Kalamazoo River", "Dune Climbing"] }
+        };
+
+        // User picks
+        let picks = {};
+        const totalPicks = 24;
+
+        // Update connection status
+        function updateConnectionStatus(status) {
+            const el = document.getElementById('connectionStatus');
+            el.className = 'connection-status ' + status;
+            if (status === 'connected') {
+                el.innerHTML = '🟢 Connected';
+            } else if (status === 'disconnected') {
+                el.innerHTML = '🔴 Offline (Local Mode)';
+            } else {
+                el.innerHTML = '⏳ Connecting...';
+            }
+        }
+
+        // Generate rounds HTML
+        function generateRounds() {
+            const container = document.getElementById('roundsContainer');
+
+            const rounds = [
+                { key: 'round1', name: 'ROUND 1', date: 'January 12th' },
+                { key: 'round2', name: 'ROUND 2', date: 'January 18th' },
+                { key: 'quarters', name: 'QUARTERFINALS', date: 'January 25th' },
+                { key: 'semis', name: 'SEMIFINALS', date: 'Super Bowl Kickoff' },
+                { key: 'finals', name: 'FINALS', date: 'Super Bowl Halftime' }
+            ];
+
+            rounds.forEach(round => {
+                const roundDiv = document.createElement('div');
+                roundDiv.className = 'round';
+                roundDiv.innerHTML = `
+                    <div class="round-header">
+                        <h3>${round.name}</h3>
+                        <div class="date">${round.date}</div>
+                    </div>
+                `;
+
+                matchups[round.key].forEach((matchup, idx) => {
+                    const matchupDiv = document.createElement('div');
+                    matchupDiv.className = 'matchup';
+                    matchupDiv.innerHTML = `
+                        <div class="matchup-label">Matchup ${idx + 1}</div>
+                        <div class="matchup-options" id="${matchup.id}">
+                            ${matchup.teams.map((team, i) => {
+                                const isWinnerSlot = team.includes('_winner');
+                                const isBye = matchup.bye === i;
+                                const label = isWinnerSlot ? getWinnerLabel(team, matchup.labels[i]) : matchup.labels[i];
+                                const teamKey = isWinnerSlot ? team : team;
+                                const infoBtn = !isWinnerSlot && destinations[team] ? `<button class="info-btn" onclick="event.stopPropagation(); openModal('${team}')">ℹ️</button>` : '';
+
+                                return `
+                                    <div class="team-option ${isBye ? 'bye' : ''} ${isWinnerSlot ? 'winner-dependent' : ''}"
+                                         data-matchup="${matchup.id}"
+                                         data-team="${teamKey}"
+                                         data-index="${i}"
+                                         onclick="selectTeam('${matchup.id}', '${teamKey}', ${i})">
+                                        <div class="team-radio"></div>
+                                        <span class="team-name">${label}</span>
+                                        ${infoBtn}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                    roundDiv.appendChild(matchupDiv);
+                });
+
+                container.appendChild(roundDiv);
+            });
+
+            // Add champion selection
+            const championDiv = document.createElement('div');
+            championDiv.className = 'round';
+            championDiv.innerHTML = `
+                <div class="round-header">
+                    <h3>🏆 CHAMPION</h3>
+                    <div class="date">Your Pick to Win It All</div>
+                </div>
+                <div class="matchup">
+                    <div class="matchup-label">Finals Winner</div>
+                    <div class="matchup-options" id="champion">
+                        <div class="team-option winner-dependent" data-matchup="champion" data-team="fm1_winner" data-index="0" onclick="selectTeam('champion', 'fm1_winner', 0)">
+                            <div class="team-radio"></div>
+                            <span class="team-name">Finals Winner</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(championDiv);
+        }
+
+        function getWinnerLabel(teamKey, fallback) {
+            const matchupId = teamKey.replace('_winner', '');
+            if (picks[matchupId] !== undefined) {
+                const matchup = findMatchup(matchupId);
+                if (matchup) {
+                    const winnerTeam = matchup.teams[picks[matchupId]];
+                    if (destinations[winnerTeam]) {
+                        return destinations[winnerTeam].name;
+                    }
+                    return getWinnerLabel(winnerTeam, fallback);
+                }
+            }
+            return fallback;
+        }
+
+        function findMatchup(id) {
+            for (const round in matchups) {
+                const found = matchups[round].find(m => m.id === id);
+                if (found) return found;
+            }
+            return null;
+        }
+
+        function selectTeam(matchupId, teamKey, index) {
+            picks[matchupId] = index;
+
+            const container = document.getElementById(matchupId);
+            container.querySelectorAll('.team-option').forEach((opt, i) => {
+                opt.classList.toggle('selected', i === index);
+            });
+
+            updateDependentMatchups();
+            updateProgress();
+            checkSubmitReady();
+        }
+
+        function updateDependentMatchups() {
+            document.querySelectorAll('.winner-dependent').forEach(option => {
+                const teamKey = option.dataset.team;
+                if (teamKey.includes('_winner')) {
+                    const label = getWinnerLabel(teamKey, 'TBD');
+                    const nameSpan = option.querySelector('.team-name');
+
+                    const matchupId = teamKey.replace('_winner', '');
+                    const pickedIndex = picks[matchupId];
+                    const matchup = findMatchup(matchupId);
+
+                    if (matchup && pickedIndex !== undefined) {
+                        let actualTeam = matchup.teams[pickedIndex];
+                        while (actualTeam.includes('_winner')) {
+                            const nestedMatchupId = actualTeam.replace('_winner', '');
+                            const nestedIndex = picks[nestedMatchupId];
+                            const nestedMatchup = findMatchup(nestedMatchupId);
+                            if (nestedMatchup && nestedIndex !== undefined) {
+                                actualTeam = nestedMatchup.teams[nestedIndex];
+                            } else {
+                                break;
+                            }
+                        }
+
+                        if (destinations[actualTeam]) {
+                            nameSpan.innerHTML = `${label} <button class="info-btn" onclick="event.stopPropagation(); openModal('${actualTeam}')">ℹ️</button>`;
+                        } else {
+                            nameSpan.textContent = label;
+                        }
+                    } else {
+                        nameSpan.textContent = label;
+                    }
+                }
+            });
+        }
+
+        function updateProgress() {
+            const count = Object.keys(picks).length;
+            const pct = Math.round((count / totalPicks) * 100);
+            const fill = document.getElementById('progressFill');
+            fill.style.width = pct + '%';
+            fill.textContent = `${count} / ${totalPicks} picks`;
+        }
+
+        function checkSubmitReady() {
+            const btn = document.getElementById('submitBtn');
+            const name = document.getElementById('voterName').value.trim();
+            const allPicked = Object.keys(picks).length === totalPicks;
+            btn.disabled = !allPicked || !name;
+        }
+
+        async function submitPicks() {
+            const name = document.getElementById('voterName').value.trim();
+            if (!name) {
+                showStatus('Please enter your name!', 'error');
+                return;
+            }
+
+            if (Object.keys(picks).length < totalPicks) {
+                showStatus('Please make all your picks first!', 'error');
+                return;
+            }
+
+            // Resolve all picks to actual team names
+            const resolvedPicks = {};
+            for (const matchupId in picks) {
+                const index = picks[matchupId];
+                const matchup = findMatchup(matchupId);
+                if (matchup) {
+                    let team = matchup.teams[index];
+                    while (team.includes('_winner')) {
+                        const nestedMatchupId = team.replace('_winner', '');
+                        const nestedIndex = picks[nestedMatchupId];
+                        const nestedMatchup = findMatchup(nestedMatchupId);
+                        if (nestedMatchup && nestedIndex !== undefined) {
+                            team = nestedMatchup.teams[nestedIndex];
+                        } else {
+                            break;
+                        }
+                    }
+                    resolvedPicks[matchupId] = team;
+                }
+            }
+
+            // Get champion
+            let champion = resolvedPicks['fm1'] || 'unknown';
+
+            const vote = {
+                name: name,
+                timestamp: new Date().toISOString(),
+                picks: resolvedPicks,
+                champion: champion
+            };
+
+            try {
+                if (firebaseEnabled && db) {
+                    // Save to Firebase
+                    await db.ref('votes').push(vote);
+                    showStatus(`Thanks ${name}! Your picks have been saved to the cloud. View the results page to see predictions!`, 'success');
+                } else {
+                    // Fallback to localStorage
+                    const votes = JSON.parse(localStorage.getItem('fadunkadunk_votes') || '[]');
+                    votes.push(vote);
+                    localStorage.setItem('fadunkadunk_votes', JSON.stringify(votes));
+                    showStatus(`Thanks ${name}! Your picks have been saved locally. View the results page to see predictions!`, 'success');
+                }
+
+                document.getElementById('submitBtn').disabled = true;
+                document.getElementById('voterName').disabled = true;
+            } catch (error) {
+                console.error('Error saving vote:', error);
+                showStatus('Error saving your vote. Please try again.', 'error');
+            }
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('submitStatus');
+            status.textContent = message;
+            status.className = 'submit-status ' + type;
+        }
+
+        function openModal(locationKey) {
+            const data = destinations[locationKey];
+            if (!data) return;
+
+            document.getElementById('modal-title').textContent = data.name;
+            document.getElementById('modal-subtitle').textContent = data.region;
+
+            const content = `
+                <div class="quick-stats">
+                    <div class="stat-box">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-label">Vibe</div>
+                        <div class="stat-value">${data.vibe}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-label">Best For</div>
+                        <div class="stat-value">${data.bestFor}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">📍</div>
+                        <div class="stat-label">Attractions</div>
+                        <div class="stat-value">${data.attractions.length} spots</div>
+                    </div>
+                </div>
+                <div class="info-section">
+                    <h3>Top Attractions</h3>
+                    <ul class="info-list">${data.attractions.map(i => `<li>${i}</li>`).join('')}</ul>
+                </div>
+                <div class="info-section">
+                    <h3>Must-Try Restaurants</h3>
+                    <ul class="info-list">${data.restaurants.map(i => `<li>${i}</li>`).join('')}</ul>
+                </div>
+                <div class="info-section">
+                    <h3>Nightlife & Entertainment</h3>
+                    <ul class="info-list">${data.nightlife.map(i => `<li>${i}</li>`).join('')}</ul>
+                </div>
+                <div class="info-section">
+                    <h3>Sports & Recreation</h3>
+                    <ul class="info-list">${data.sports.map(i => `<li>${i}</li>`).join('')}</ul>
+                </div>
+            `;
+
+            document.getElementById('modal-content').innerHTML = content;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            generateRounds();
+
+            document.getElementById('voterName').addEventListener('input', checkSubmitReady);
+            document.getElementById('submitBtn').addEventListener('click', submitPicks);
+
+            document.getElementById('modal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('modal')) closeModal();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+            });
+
+            // Check Firebase connection
+            if (firebaseEnabled && db) {
+                try {
+                    await db.ref('.info/connected').once('value');
+                    updateConnectionStatus('connected');
+                } catch (e) {
+                    updateConnectionStatus('disconnected');
+                }
+            } else {
+                updateConnectionStatus('disconnected');
+            }
+
+            document.getElementById('loadingOverlay').classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
